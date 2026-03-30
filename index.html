@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SwiftCart Kenya</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar">
+    <h2 id="storeName">Store</h2>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>🔥 Hot Deals in Kenya</h1>
+    <p>Order Now & Pay via M-Pesa or Cash on Delivery</p>
+
+    <div class="countdown">
+      Offer ends in: <span id="timer">02:00:00</span>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="products" id="productContainer"></section>
+
+  <!-- STICKY CART -->
+  <div class="sticky-bar">
+    <span>Cart: <span id="cartCount">0</span></span>
+    <button onclick="openCheckout()">Checkout</button>
+  </div>
+
+  <!-- CHECKOUT MODAL -->
+  <div id="checkout">
+    <h2>Order Summary</h2>
+    <div id="summary"></div>
+
+    <p>Total: KES <span id="total"></span></p>
+
+    <input id="name" placeholder="Full Name" />
+    <input id="phone" placeholder="07XXXXXXXX" />
+    <input id="location" placeholder="Location" />
+
+    <button onclick="submitOrder()">Place Order</button>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>✅ M-Pesa Accepted | 🚚 Fast Delivery</p>
+    <p>© 2026 SwiftCart Kenya</p>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
