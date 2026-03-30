@@ -1,53 +1,71 @@
 let cart = [];
-
 const container = document.getElementById("productContainer");
-const cartCount = document.getElementById("cartCount");
 
-/* LOAD STORE NAME */
 document.getElementById("storeName").innerText = CONFIG.storeName;
 
 /* RENDER PRODUCTS */
-CONFIG.products.forEach(p => {
-  const div = document.createElement("div");
-  div.className = "card";
+function renderProducts(category = "all") {
+  container.innerHTML = "";
 
-  div.innerHTML = `
-    <img src="${p.image}" />
-    <h3>${p.name}</h3>
-    <p>KES ${p.price}</p>
-    <small>Only ${p.stock} left!</small>
-    <button onclick="addToCart(${p.id})">Add to Cart</button>
-  `;
+  CONFIG.products
+    .filter(p => category === "all" || p.category === category)
+    .forEach(p => {
+      const div = document.createElement("div");
+      div.className = "card";
 
-  container.appendChild(div);
-});
+      div.innerHTML = `
+        <img src="${p.image}">
+        <h3>${p.name}</h3>
+        <p>KES ${p.price}</p>
+        <button onclick="addToCart(${p.id})">Add to Cart</button>
+      `;
 
-/* ADD TO CART */
+      container.appendChild(div);
+    });
+}
+
+renderProducts();
+
+/* FILTER */
+function filterProducts(cat) {
+  renderProducts(cat);
+}
+
+/* CART */
 function addToCart(id) {
   const product = CONFIG.products.find(p => p.id === id);
   cart.push(product);
-  updateCart();
+  document.getElementById("cartCount").innerText = cart.length;
 }
 
-/* UPDATE CART */
-function updateCart() {
-  cartCount.innerText = cart.length;
-}
+/* OPEN CART */
+function openCart() {
+  const modal = document.getElementById("cartModal");
+  const items = document.getElementById("cartItems");
 
-/* OPEN CHECKOUT */
-function openCheckout() {
-  const summary = document.getElementById("summary");
   let total = 0;
-
-  summary.innerHTML = "";
+  items.innerHTML = "";
 
   cart.forEach(item => {
     total += item.price;
-    summary.innerHTML += `<p>${item.name} - KES ${item.price}</p>`;
+    items.innerHTML += `<p>${item.name} - KES ${item.price}</p>`;
   });
 
-  document.getElementById("total").innerText = total;
+  document.getElementById("cartTotal").innerText = total;
+  modal.style.display = "block";
+}
+
+function closeCart() {
+  document.getElementById("cartModal").style.display = "none";
+}
+
+/* CHECKOUT */
+function openCheckout() {
   document.getElementById("checkout").style.display = "block";
+}
+
+function closeCheckout() {
+  document.getElementById("checkout").style.display = "none";
 }
 
 /* SUBMIT ORDER */
@@ -57,55 +75,37 @@ async function submitOrder() {
   const location = document.getElementById("location").value;
 
   if (!/^07\d{8}$/.test(phone)) {
-    alert("Enter a valid Kenyan number (07XXXXXXXX)");
+    alert("Invalid phone number");
     return;
   }
 
-  const productNames = cart.map(p => p.name).join(", ");
-  const total = cart.reduce((sum, p) => sum + p.price, 0);
+  const products = cart.map(p => p.name).join(", ");
+  const total = cart.reduce((s, p) => s + p.price, 0);
 
-  const order = {
-    name,
-    phone,
-    products: productNames,
-    total,
-    location
-  };
-
-  /* SEND TO GOOGLE SHEETS */
   try {
     await fetch(CONFIG.googleScriptURL, {
       method: "POST",
-      body: JSON.stringify(order)
+      body: JSON.stringify({ name, phone, products, total, location })
     });
   } catch (err) {
     console.log(err);
   }
 
-  /* WHATSAPP MESSAGE */
-  const message = `Hello, I want to order:
-
-Products: ${productNames}
+  const msg = `Order:
+${products}
 Total: KES ${total}
 Name: ${name}
 Phone: ${phone}
 Location: ${location}`;
 
-  const url = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(message)}`;
-
-  window.location.href = url;
+  window.location.href = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`;
 }
 
-/* COUNTDOWN TIMER */
-let time = 7200;
-
+/* TIMER */
+let t = 3600;
 setInterval(() => {
-  let hrs = Math.floor(time / 3600);
-  let mins = Math.floor((time % 3600) / 60);
-  let secs = time % 60;
-
-  document.getElementById("timer").innerText =
-    `${hrs}:${mins}:${secs}`;
-
-  time--;
+  let m = Math.floor(t / 60);
+  let s = t % 60;
+  document.getElementById("timer").innerText = `${m}:${s}`;
+  t--;
 }, 1000);
