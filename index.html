@@ -4,41 +4,54 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SwiftCart Kenya</title>
-
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav class="navbar">
-    <h2 id="storeName">Store</h2>
-  </nav>
+<!-- NAVBAR -->
+<nav class="navbar">
+  <h2 id="storeName"></h2>
 
-  <!-- HERO -->
-  <section class="hero">
-    <h1>🔥 Hot Deals in Kenya</h1>
-    <p>Order Now & Pay via M-Pesa or Cash on Delivery</p>
-
-    <div class="countdown">
-      Offer ends in: <span id="timer">02:00:00</span>
-    </div>
-  </section>
-
-  <!-- PRODUCTS -->
-  <section class="products" id="productContainer"></section>
-
-  <!-- STICKY CART -->
-  <div class="sticky-bar">
-    <span>Cart: <span id="cartCount">0</span></span>
-    <button onclick="openCheckout()">Checkout</button>
+  <div class="nav-links">
+    <button onclick="filterProducts('all')">Home</button>
+    <button onclick="filterProducts('fashion')">Fashion</button>
+    <button onclick="filterProducts('electronics')">Electronics</button>
+    <button onclick="filterProducts('accessories')">Accessories</button>
   </div>
 
-  <!-- CHECKOUT MODAL -->
-  <div id="checkout">
-    <h2>Order Summary</h2>
-    <div id="summary"></div>
+  <div class="cart-icon" onclick="openCart()">
+    🛒 <span id="cartCount">0</span>
+  </div>
+</nav>
 
-    <p>Total: KES <span id="total"></span></p>
+<!-- HERO -->
+<section class="hero">
+  <h1>🔥 Best Deals in Kenya</h1>
+  <p>Fast Delivery | Pay via M-Pesa</p>
+  <div class="countdown">Ends in: <span id="timer"></span></div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products" id="productContainer"></section>
+
+<!-- CART MODAL -->
+<div id="cartModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeCart()">&times;</span>
+    <h2>Your Cart</h2>
+
+    <div id="cartItems"></div>
+    <p>Total: KES <span id="cartTotal"></span></p>
+
+    <button onclick="openCheckout()">Proceed to Checkout</button>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div id="checkout" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeCheckout()">&times;</span>
+    <h2>Checkout</h2>
 
     <input id="name" placeholder="Full Name" />
     <input id="phone" placeholder="07XXXXXXXX" />
@@ -46,14 +59,14 @@
 
     <button onclick="submitOrder()">Place Order</button>
   </div>
+</div>
 
-  <!-- FOOTER -->
-  <footer>
-    <p>✅ M-Pesa Accepted | 🚚 Fast Delivery</p>
-    <p>© 2026 SwiftCart Kenya</p>
-  </footer>
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 SwiftCart Kenya</p>
+</footer>
 
-  <script src="config.js"></script>
-  <script src="script.js"></script>
+<script src="config.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
